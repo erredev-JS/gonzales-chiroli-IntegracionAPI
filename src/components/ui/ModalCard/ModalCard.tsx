@@ -5,15 +5,15 @@ import { useStoreModal } from '../../../store/useStoreModal'
 import { ITareas } from '../../../types/ITareas'
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 import useStoreTareas from '../../../store/useStoreTareas'
-import { createTareaController, updateTareaController } from '../../../data/tareaController'
+import { createTareaController, updateTareaController} from '../../../data/tareaController'
 import useStoreSprints from '../../../store/useStoreSprints'
 import { updateSprintController } from '../../../data/sprintController'
 import { bigSweetAlertPopup } from '../../../utils/bigSweetAlertPopup'
+import { ICreateTareas } from '../../../types/ICreateTareas'
 
 
 export const ModalCard = () => {
-    const initialStateTarea: ITareas = {
-        id: "",
+    const initialStateTarea: ICreateTareas  = {
         titulo: "",
         descripcion: "",
         estado: "",
@@ -23,7 +23,25 @@ export const ModalCard = () => {
     const {sprintActiva, addTaskToSprint, setSprintActiva, editTaskSprint} = useStoreSprints()
     const {tareaActiva, editTarea, setTareaActiva, addTareaInactiva} = useStoreTareas()
     const {closeModalTask} = useStoreModal()
-    const [formValues, setFormValues] = useState<ITareas>(initialStateTarea);
+    const initialStateTareaCreate: ICreateTareas = {
+        titulo: "",
+        descripcion: "",
+        estado: "pendiente",  // "pendiente" por defecto
+        fechaLimite: "",
+    }
+    
+    const initialStateTareaUpdate: ITareas = {
+        _id: "",
+        titulo: "",
+        descripcion: "",
+        estado: "",
+        fechaLimite: "",
+    }
+    
+    const [formValues, setFormValues] = useState<ICreateTareas | ITareas>(
+        tareaActiva ? { ...tareaActiva } : initialStateTareaCreate
+    );
+    
 
     useEffect(()=> {
         if(tareaActiva){
@@ -38,9 +56,13 @@ export const ModalCard = () => {
     
 
     const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const {name, value} = e.target;
-        setFormValues((prev)=>({...prev, [`${name}`]:value,}))
-    }
+        const { name, value } = e.target;
+        setFormValues((prev) => ({
+            ...prev,
+            [`${name}`]: value,
+        }));
+    };
+    
 
     const handleCloseModalTask = () => {
         setTareaActiva(null)
@@ -49,54 +71,64 @@ export const ModalCard = () => {
 
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
-
-        if(!sprintActiva){
-            if(!tareaActiva){
-                formValues.id = Date.now().toString()
-                formValues.estado = "pendiente"
-                createTareaController(formValues)
-                addTareaInactiva(formValues)
-                bigSweetAlertPopup("Tarea creada")
-            }else{
-                updateTareaController(formValues)
-                editTarea(formValues)
-                bigSweetAlertPopup("Tarea actualizada")
-
+    
+        if (!sprintActiva) {
+            if (!tareaActiva) {
+                // Crear tarea nueva
+                formValues.estado = "pendiente";
+                createTareaController(formValues as ICreateTareas)  // Asegúrate de usar la interfaz de creación
+                    .then((data) => {
+                        console.log("Tarea creada con éxito:", data);
+                        addTareaInactiva(data);
+                        bigSweetAlertPopup("Tarea creada");
+                    })
+                    .catch((err) => {
+                        console.error("Error al crear tarea:", err);
+                    });
+            } else {
+                // Actualizar tarea existente
+                updateTareaController(formValues as ITareas)  // Asegúrate de usar la interfaz de actualización
+                    .then(() => {
+                        editTarea(formValues as ITareas);
+                        bigSweetAlertPopup("Tarea actualizada");
+                    })
+                    .catch((err) => {
+                        console.error("Error al actualizar tarea:", err);
+                    });
             }
-        }else{
-            if(!tareaActiva){
-                console.log("Creando tarea en Sprint activa", sprintActiva.nombre)
-                formValues.id = Date.now().toString()
-                formValues.estado = "pendiente"
-                addTaskToSprint(formValues, sprintActiva.id)
-
-                const sprintActualizado = useStoreSprints.getState().sprints.find(s => s.id === sprintActiva.id)
-
+        } else {
+            // Crear tarea dentro de un Sprint
+            if (!tareaActiva) {
+                console.log("Creando tarea en Sprint activa", sprintActiva.nombre);
+                formValues.estado = "pendiente";
+                addTaskToSprint(formValues as ITareas, sprintActiva.id);
+        
+                const sprintActualizado = useStoreSprints
+                    .getState()
+                    .sprints.find((s) => s.id === sprintActiva.id);
+        
                 if (sprintActualizado) {
-                    setSprintActiva(sprintActualizado)
-                updateSprintController(sprintActualizado)
-                bigSweetAlertPopup("Tarea creada en la Sprint")
-
+                    setSprintActiva(sprintActualizado);
+                    updateSprintController(sprintActualizado);
+                    bigSweetAlertPopup("Tarea creada en la Sprint");
                 }
-
-            }else{
-                editTaskSprint(formValues, sprintActiva.id)
-                const sprintActualizado = useStoreSprints.getState().sprints.find(s => s.id === sprintActiva.id)
-
+            } else {
+                editTaskSprint(formValues as ITareas, sprintActiva.id);
+                const sprintActualizado = useStoreSprints
+                    .getState()
+                    .sprints.find((s) => s.id === sprintActiva.id);
+        
                 if (sprintActualizado) {
-                    setSprintActiva(sprintActualizado)
-                    updateSprintController(sprintActualizado)
-                    bigSweetAlertPopup("Tarea actualizada")
-
+                    setSprintActiva(sprintActualizado);
+                    updateSprintController(sprintActualizado);
+                    bigSweetAlertPopup("Tarea actualizada");
                 }
             }
         }
-
-
-        setTareaActiva(null)
-        closeModalTask()
-    }
     
+        setTareaActiva(null);
+        closeModalTask();
+    };
     
     return(
         <div className={styles.backgroundFilter}>

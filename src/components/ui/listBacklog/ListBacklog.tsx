@@ -29,7 +29,7 @@ export const ListBacklog = () => {
       
       const firstGetTareas = async () => {
         const tareas = await getAllTareasController();
-        setTareas(tareas ?? []);
+        setTareas(tareas);
         
       }
 
@@ -52,7 +52,7 @@ export const ListBacklog = () => {
     <div className={styles.listContainer}>
      
         {tareas.map((tarea) => (
-          <TareaCard key={tarea.id} tarea={tarea}></TareaCard>
+          <TareaCard key={tarea._id} tarea={tarea}></TareaCard>
         ))}
 
     </div>

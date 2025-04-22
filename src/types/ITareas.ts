@@ -1,5 +1,5 @@
 export interface ITareas {
-    id: string,
+    _id: string,
     estado: string,
     titulo: string,
     descripcion: string,

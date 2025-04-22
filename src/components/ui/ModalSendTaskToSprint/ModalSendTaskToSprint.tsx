@@ -5,7 +5,7 @@ import { Button } from 'react-bootstrap'
 import { useStoreModal } from '../../../store/useStoreModal'
 import { useState } from 'react'
 import { updateSprintController } from '../../../data/sprintController'
-import { deleteTareaController } from '../../../data/tareaController'
+// import { deleteTareaController } from '../../../data/tareaController'
 import { bigSweetAlertPopup } from '../../../utils/bigSweetAlertPopup'
 
 // interface IModalSendTaskToSprint {
@@ -41,7 +41,7 @@ export const ModalSendTaskToSprint  = () => {
 
 
         addTaskToSprint(tareaActiva, sprintSeleccionada) // Actualizo el estado
-        deleteTareaController(tareaActiva.id)
+        // deleteTareaController(tareaActiva.id)
         setTareaActiva(null)
         
         closeModalTaskSend()

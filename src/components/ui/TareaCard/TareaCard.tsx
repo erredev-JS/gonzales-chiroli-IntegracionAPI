@@ -5,10 +5,11 @@ import { FC } from "react"
 import { useStoreModal } from "../../../store/useStoreModal"
 import useStoreTareas from "../../../store/useStoreTareas"
 import Swal from "sweetalert2"
-import { deleteTareaController } from "../../../data/tareaController"
+
 import viewIcon from '../../../assets/viewIcon.svg'
 import editIcon from '../../../assets/editIcon.svg'
 import deleteIcon from '../../../assets/deleteIcon.svg'
+import { deleteTareaController } from "../../../data/tareaController"
 
 
 
@@ -64,8 +65,8 @@ swalWithBootstrapButtons.fire({
       text: "La tarea ha sido eliminada.",
       icon: "success"
     });
-    deleteTareaController(tarea.id)
-    deleteTarea(tarea.id)
+    deleteTareaController(tarea._id)
+    deleteTarea(tarea._id)
   } else if (
     /* Read more about handling dismissals below */
     result.dismiss === Swal.DismissReason.cancel
