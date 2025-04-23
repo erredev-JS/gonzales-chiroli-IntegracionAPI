@@ -68,7 +68,7 @@ swalWithBootstrapButtons.fire({
     deleteTareaController(tarea._id)
     deleteTarea(tarea._id)
   } else if (
-    /* Read more about handling dismissals below */
+    
     result.dismiss === Swal.DismissReason.cancel
   ) {
     swalWithBootstrapButtons.fire({

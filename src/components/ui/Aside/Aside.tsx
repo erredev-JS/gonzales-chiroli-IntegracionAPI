@@ -56,7 +56,7 @@ export const Aside = () => {
                 </div>
 
                 <div className={styles.cardContainer}>
-                    {sprints.map((sprint) => <SprintCard key={sprint.id} sprintIn={sprint} />)}
+                    {sprints.map((sprint) => <SprintCard key={sprint._id} sprintIn={sprint} />)}
                 </div>
                 
             </div>

@@ -2,9 +2,9 @@ import { ITareas } from "./ITareas"
 
 
 export interface ISprint {
-    id: string ,
+    _id: string ,
     fechaInicio: string,
-    fechaCierre: string,
+    fechaLimite: string,
     nombre: string
     tareas: ITareas[]
 }

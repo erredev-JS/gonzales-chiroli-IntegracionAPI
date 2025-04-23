@@ -6,26 +6,30 @@ import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 import { ISprint } from '../../../types/iSprints'
 import { createSprintController, updateSprintController } from '../../../data/sprintController'
 import { bigSweetAlertPopup } from '../../../utils/bigSweetAlertPopup'
+import { ICreateSprints } from '../../../types/ICreateSprints'
 
 
 const ModalSprint = () => {
 
-    const initialStateSprint : ISprint = {
-        id : '',
+
+
+    
+    const { closeModalSprint} = useStoreModal()
+    const {setSprintActiva, sprintActiva, addSprint, editSprint} = useStoreSprints()
+
+    const [previusSprinActiva,  setPreviusSprinActiva] = useState<null | ISprint>(null)
+    const initialStateSprint : ICreateSprints = {
         fechaInicio : '',
-        fechaCierre : '', 
+        fechaLimite : '', 
         nombre : '',
         tareas : []
     }
-
-    const { closeModalSprint} = useStoreModal()
-    const {setSprintActiva, sprintActiva, addSprint, editSprint} = useStoreSprints()
-    const [formValues, setFormValues] = useState<ISprint>(initialStateSprint) 
-
-    const [previusSprinActiva,  setPreviusSprinActiva] = useState<null | ISprint>(null)
-
+    const [formValues, setFormValues] = useState<ICreateSprints | ISprint>(initialStateSprint) 
+    
+    
     useEffect(() => {
        if (sprintActiva){
+        
         setFormValues({...sprintActiva})
         setPreviusSprinActiva(sprintActiva)
        }else{
@@ -57,7 +61,6 @@ const ModalSprint = () => {
         e.preventDefault()
 
         if(!sprintActiva){
-            formValues.id = Date.now().toString()
             createSprintController(formValues)
             addSprint(formValues)
             
@@ -85,8 +88,8 @@ const ModalSprint = () => {
                     <input type="text" name="nombre" id="" placeholder='Titulo' required value={formValues.nombre} onChange={handleChange} />
                     <label htmlFor="">Fecha Inicio</label>
                     <input type="date" name="fechaInicio" id="" required value={formValues.fechaInicio} onChange={handleChange}/>
-                    <label htmlFor="">Fecha Cierre</label>
-                    <input type="date" name="fechaCierre" id="" placeholder='Fecha Cierre' required value={formValues.fechaCierre} onChange={handleChange}/>
+                    <label htmlFor="">Fecha Limite</label>
+                    <input type="date" name="fechaLimite" id="" placeholder='Fecha Cierre' required value={formValues.fechaLimite} onChange={handleChange}/>
                     <div className={styles.containerButtons}>
                         <Button variant='danger' onClick={handleCloseModalSprint}>Cancelar</Button> 
                         <Button type='submit' variant='success'>Aceptar</Button>

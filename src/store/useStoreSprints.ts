@@ -4,7 +4,7 @@ import { ITareas } from "../types/ITareas";
 
 
 interface IStoreSprints {
-  sprintActiva: ISprint | null;
+  sprintActiva: ISprint | null ;
 
   sprints: ISprint[];
  
@@ -43,36 +43,36 @@ export const useStoreSprints = create<IStoreSprints>((set) => ({
 
   editSprint: (sprintActualizada) =>
     set((state) => {
-        const arraySprints = state.sprints.map((sprint) => (sprint.id === sprintActualizada.id ? { ...sprint, ...sprintActualizada } : sprint));
+        const arraySprints = state.sprints.map((sprint) => (sprint._id === sprintActualizada._id ? { ...sprint, ...sprintActualizada } : sprint));
         return { sprints: arraySprints };
     }),
 
   deleteSprint: (idSprint) =>
     set((state) => ({
-        sprints: state.sprints.filter((sprint) => sprint.id !== idSprint),
+        sprints: state.sprints.filter((sprint) => sprint._id !== idSprint),
     })),
 
   setSprintActiva: (sprintActivaIn) => set(() => ({ sprintActiva: sprintActivaIn })),
 
   addTaskToSprint: (tarea, idSprint) => set((state) => ({
-    sprints: state.sprints.map((sprint) => sprint.id === idSprint ? {...sprint, tareas: [...sprint.tareas, tarea] } : sprint)
+    sprints: state.sprints.map((sprint) => sprint._id === idSprint ? {...sprint, tareas: [...sprint.tareas, tarea] } : sprint)
   })),
   deleteTaskSprint: (idTarea, idSprint) =>
     set((state) => {
       const nuevosSprints = state.sprints.map((sprint) =>
-        sprint.id === idSprint
+        sprint._id === idSprint
           ? {
               ...sprint,
               tareas: (sprint.tareas || []).filter(
-                (tarea) => tarea.id !== idTarea
+                (tarea) => tarea._id !== idTarea
               ),
             }
           : sprint
       );
   
       const nuevaSprintActiva =
-        state.sprintActiva?.id === idSprint
-          ? nuevosSprints.find((s) => s.id === idSprint) || null
+        state.sprintActiva?._id === idSprint
+          ? nuevosSprints.find((s) => s._id === idSprint) || null
           : state.sprintActiva;
   
       return {
@@ -85,11 +85,11 @@ export const useStoreSprints = create<IStoreSprints>((set) => ({
     editTaskSprint: (tareaActualizada, idSprint) =>
       set((state) => {
         const nuevosSprints = state.sprints.map((sprint) =>
-          sprint.id === idSprint
+          sprint._id === idSprint
             ? {
                 ...sprint,
                 tareas: (sprint.tareas || []).map((tarea) =>
-                  tarea.id === tareaActualizada.id
+                  tarea._id === tareaActualizada._id
                     ? { ...tarea, ...tareaActualizada }
                     : tarea
                 ),
@@ -98,8 +98,8 @@ export const useStoreSprints = create<IStoreSprints>((set) => ({
         );
     
         const nuevaSprintActiva =
-          state.sprintActiva?.id === idSprint
-            ? nuevosSprints.find((s) => s.id === idSprint) || null
+          state.sprintActiva?._id === idSprint
+            ? nuevosSprints.find((s) => s._id === idSprint) || null
             : state.sprintActiva;
     
         return {

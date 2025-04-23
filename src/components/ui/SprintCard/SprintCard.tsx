@@ -25,7 +25,7 @@ export const SprintCard: FC<ISprintCard> = ({sprintIn}) => {
     const navigate = useNavigate();
     const handleClick = () => {
       setSprintActiva(sprintIn)
-      navigate(`/sprintScreen/${sprintIn.id}`);
+      navigate(`/sprintScreen/${sprintIn._id}`);
     };
 
     const handleOpenModalSprintEdit = () => {
@@ -57,8 +57,8 @@ export const SprintCard: FC<ISprintCard> = ({sprintIn}) => {
           text: "La tarea ha sido eliminada.",
           icon: "success"
         });
-        eliminateSprintController(sprintIn.id)
-        deleteSprint(sprintIn.id)
+        eliminateSprintController(sprintIn._id)
+        deleteSprint(sprintIn._id)
       } else if (
         /* Read more about handling dismissals below */
         result.dismiss === Swal.DismissReason.cancel
@@ -80,7 +80,7 @@ export const SprintCard: FC<ISprintCard> = ({sprintIn}) => {
         <div className={styles.dataContainer}>
         <h2>{sprintIn.nombre}</h2>
         <h3>Inicio: {sprintIn.fechaInicio}</h3>
-        <h3>Cierre: {sprintIn.fechaCierre}</h3>
+        <h3>Cierre: {sprintIn.fechaLimite}</h3>
         <div className={styles.buttonContainer}>
                 <Button className={styles.btnCustom} onClick={handleClick}>
                     <img src={viewIcon} />

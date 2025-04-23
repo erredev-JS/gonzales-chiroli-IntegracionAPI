@@ -1,12 +1,16 @@
 const mongoose = require('mongoose')
 
 const sprintSchema = new mongoose.Schema({
+    nombre : {
+        type: String,
+        required : true
+    },
     fechaInicio : {
-        type : Date,
+        type : String,
         required : true
     },
     fechaLimite : {
-        type : Date,
+        type : String,
         required : true
     },
     tareas : [{
@@ -14,6 +18,8 @@ const sprintSchema = new mongoose.Schema({
     }]
 })
 
-const sprint = mongoose.model('Sprints', sprintSchema)
 
-module.exports = sprint
+
+const Sprint = mongoose.model('Sprints', sprintSchema)
+
+module.exports = Sprint

@@ -13,16 +13,12 @@ import { ICreateTareas } from '../../../types/ICreateTareas'
 
 
 export const ModalCard = () => {
-    const initialStateTarea: ICreateTareas  = {
-        titulo: "",
-        descripcion: "",
-        estado: "",
-        fechaLimite: ""
-    }
+    
 
     const {sprintActiva, addTaskToSprint, setSprintActiva, editTaskSprint} = useStoreSprints()
     const {tareaActiva, editTarea, setTareaActiva, addTareaInactiva} = useStoreTareas()
     const {closeModalTask} = useStoreModal()
+    
     const initialStateTareaCreate: ICreateTareas = {
         titulo: "",
         descripcion: "",
@@ -47,7 +43,7 @@ export const ModalCard = () => {
         if(tareaActiva){
             setFormValues({...tareaActiva})
         }else {
-            setFormValues(initialStateTarea); 
+            setFormValues(initialStateTareaCreate); 
         }
     }, [tareaActiva])
 
@@ -101,11 +97,11 @@ export const ModalCard = () => {
             if (!tareaActiva) {
                 console.log("Creando tarea en Sprint activa", sprintActiva.nombre);
                 formValues.estado = "pendiente";
-                addTaskToSprint(formValues as ITareas, sprintActiva.id);
+                addTaskToSprint(formValues as ITareas, sprintActiva._id);
         
                 const sprintActualizado = useStoreSprints
                     .getState()
-                    .sprints.find((s) => s.id === sprintActiva.id);
+                    .sprints.find((s) => s._id === sprintActiva._id);
         
                 if (sprintActualizado) {
                     setSprintActiva(sprintActualizado);
@@ -113,10 +109,10 @@ export const ModalCard = () => {
                     bigSweetAlertPopup("Tarea creada en la Sprint");
                 }
             } else {
-                editTaskSprint(formValues as ITareas, sprintActiva.id);
+                editTaskSprint(formValues as ITareas, sprintActiva._id);
                 const sprintActualizado = useStoreSprints
                     .getState()
-                    .sprints.find((s) => s.id === sprintActiva.id);
+                    .sprints.find((s) => s._id === sprintActiva._id);
         
                 if (sprintActualizado) {
                     setSprintActiva(sprintActualizado);

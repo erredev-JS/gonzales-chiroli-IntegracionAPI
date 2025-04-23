@@ -39,7 +39,7 @@ exports.putSprints = async (req, res) => {
     try {
         const sprint = await Sprint.findByIdAndUpdate(req.params.id, req.body, {new : true})
         if (!sprint) return res.status(404).json({msg : 'Sprint no encontrada'})
-        const updateSprint = await Sprint.findById(sprint._id).populate('tasks') 
+        const updateSprint = await Sprint.findById(sprint._id).populate('tareas') 
         res.status(201).json(updateSprint)
     } catch (error) {
         res.status(500).json({msg : error.message})
