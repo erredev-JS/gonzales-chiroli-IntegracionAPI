@@ -54,17 +54,17 @@ const ModalSprint = () => {
         closeModalSprint()
     }
 
+    // Funcion para crear / actualizar
     const handleSubmit = (e : FormEvent) => {
         e.preventDefault()
 
         if(!sprintActiva){
-            createSprintController(formValues as ISprint)
+            createSprintController(formValues as ICreateSprints)
             addSprint(formValues as ISprint)
             
         }else{
             updateSprintController(formValues as ISprint)
             bigSweetAlertPopup("Sprint actualizada")
-
             editSprint(formValues as ISprint)
             
         }

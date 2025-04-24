@@ -55,8 +55,8 @@ export const useStoreSprints = create<IStoreSprints>((set) => ({
   setSprintActiva: (sprintActivaIn) => set(() => ({ sprintActiva: sprintActivaIn })),
 
   addTaskToSprint: (tarea, idSprint) => set((state) => ({
-    sprints: state.sprints.map((sprint) => sprint._id === idSprint ? {...sprint, tareas: [...sprint.tareas, tarea] } : sprint)
-  })),
+    sprints: state.sprints.map((sprint) => sprint._id === idSprint ? {...sprint, tareas: [...sprint.tareas || [], tarea._id] } : sprint)
+    })),
   deleteTaskSprint: (idTarea, idSprint) =>
     set((state) => {
       const nuevosSprints = state.sprints.map((sprint) =>

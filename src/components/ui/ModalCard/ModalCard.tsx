@@ -97,17 +97,23 @@ export const ModalCard = () => {
             if (!tareaActiva) {
                 console.log("Creando tarea en Sprint activa", sprintActiva.nombre);
                 formValues.estado = "pendiente";
-                addTaskToSprint(formValues as ITareas, sprintActiva._id);
-        
-                const sprintActualizado = useStoreSprints
+
+                createTareaController(formValues as ICreateTareas) // Se crea la tarea
+                .then((data) => {
+                    addTaskToSprint(data as ITareas, sprintActiva._id); // Se adhiere la tarea a la sprint
+                    const sprintActualizado = useStoreSprints
                     .getState()
-                    .sprints.find((s) => s._id === sprintActiva._id);
-        
-                if (sprintActualizado) {
-                    setSprintActiva(sprintActualizado);
-                    updateSprintController(sprintActualizado);
-                    bigSweetAlertPopup("Tarea creada en la Sprint");
-                }
+                    .sprints.find((sprint) => sprint._id === sprintActiva._id)
+
+                    if(sprintActualizado){
+                        setSprintActiva(sprintActualizado)
+                        updateSprintController(sprintActualizado)
+                        bigSweetAlertPopup("Tarea creada en Sprint")
+                    }
+                })
+                .catch((err) => {
+                    console.log('No se pudo crear tarea en la sprint', err);
+                })
             } else {
                 editTaskSprint(formValues as ITareas, sprintActiva._id);
                 const sprintActualizado = useStoreSprints
