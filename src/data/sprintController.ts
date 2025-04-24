@@ -7,14 +7,15 @@ import { ICreateSprints } from "../types/ICreateSprints"
 
 
 
-export const getAllSprintsController = async (): Promise<ISprint[] | undefined> => {
+export const getAllSprintsController = async (): Promise<ISprint[]> => {
     try{
         const response = await axios.get(URL_SPRINTLIST)
         console.log("SPrints", response.data)
-        return response.data
+        return response.data ?? []
 
     }catch(error){
         console.log("Hubo un error en getAllSprints", error)
+        return []
     }
 }
 
