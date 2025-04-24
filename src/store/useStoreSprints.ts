@@ -64,7 +64,7 @@ export const useStoreSprints = create<IStoreSprints>((set) => ({
           ? {
               ...sprint,
               tareas: (sprint.tareas || []).filter(
-                (tarea) => tarea._id !== idTarea
+                (tarea) => tarea !== idTarea
               ),
             }
           : sprint
