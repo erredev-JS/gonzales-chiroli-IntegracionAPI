@@ -5,7 +5,7 @@ import { URL_TASKS } from "../utils/constantes"
 import Swal from "sweetalert2"
 import { ICreateTareas } from "../types/ICreateTareas"
 
-export const searchOne = async (id: string): Promise<ITareas[]> => {
+export const searchOne = async (id: string): Promise<ITareas> => {
     try {
         const res = await axios.get(`${URL_TASKS}/${id}`);
         return res.data;

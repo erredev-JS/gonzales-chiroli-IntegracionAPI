@@ -48,9 +48,9 @@ export const ListSprint = () => {
     
             try {
                 const fetchedTasks = await Promise.all(
-                    selectedSprint.tareas.map(async task => {
+                    selectedSprint.tareas.map(async idTask => {
                         try {
-                            return await searchOne(task._id);
+                            return await searchOne(idTask);
                         } catch (error) {
                             console.error("Error al cargar la tarea:", error);
                             return null; // Devuelve null en caso de error
@@ -60,6 +60,7 @@ export const ListSprint = () => {
     
                 // Filtra valores nulos y asegura el tipo correcto
                 const validTasks = fetchedTasks.filter((task): task is ITareas => task !== null);
+                console.log(selectedSprint.tareas)
                 setArrayTareas(validTasks); // Asegura que solo se asignen tareas válidas
             } catch (error) {
                 console.error("Error en la carga de tareas:", error);
@@ -71,9 +72,9 @@ export const ListSprint = () => {
     
     
 
-    const pendingTasks = selectedSprint?.tareas.filter(task => task.estado === 'pendiente') || []
-    const inProgress = selectedSprint?.tareas.filter(task => task.estado === 'en_progreso') || []
-    const completed = selectedSprint?.tareas.filter(task => task.estado === 'finalizada') || []
+    const pendingTasks = arrayTareas?.filter(task => task.estado === 'pendiente') || []
+    const inProgress = arrayTareas?.filter(task => task.estado === 'en_progreso') || []
+    const completed = arrayTareas?.filter(task => task.estado === 'finalizada') || []
 
     return (
         <div className={styles.containerPrincipal}>
@@ -87,43 +88,32 @@ export const ListSprint = () => {
 
             <div className={styles.containercontentFlex}>
 
-                <div className={styles.containerContentTasks}>
-                    <h6>Tareas Pendientes : {pendingTasks.length}</h6>
-                    <div className={styles.containerTasks}>                       
-                    {selectedSprint?.tareas.map(task => {
-                        const matchedTask = tareas.find(tarea => tarea._id === task._id);
-                        return matchedTask ? (
-                        <CardTaskInSprint key={task._id} tarea={matchedTask} estado="pendiente" />
-                        ) : null; // Si no hay coincidencia no renderiza nada
-                    })}
-                    </div>
-                </div>
+            <div className={styles.containerContentTasks}>
+  <h6>Tareas Pendientes : {pendingTasks.length}</h6>
+  <div className={styles.containerTasks}>
+    {pendingTasks.map(task => (
+      <CardTaskInSprint key={task._id} tarea={task} estado="pendiente" />
+    ))}
+  </div>
+</div>
 
+<div className={styles.containerContentTasks}>
+  <h6>Tareas en Progreso : {inProgress.length}</h6>
+  <div className={styles.containerTasks}>
+    {inProgress.map(task => (
+      <CardTaskInSprint key={task._id} tarea={task} estado="en_progreso" />
+    ))}
+  </div>
+</div>
 
-                <div className={styles.containerContentTasks}>
-                    
-                    <h6>Tareas en Progreso : {inProgress.length}</h6>
-                    <div className={styles.containerTasks}>
-                    {selectedSprint?.tareas.map(task => {
-                            const matchedTask = tareas.find(tarea => tarea._id === task._id)
-                            return matchedTask ? (
-                                <CardTaskInSprint key={task._id} tarea={matchedTask} estado="en_progreso"/>
-                            ): null 
-                    })}
-                    </div>
-                </div>
-
-                <div className={styles.containerContentTasks}>
-                    <h6>Tareas Finalizadas : {completed.length}</h6>
-                    <div className={styles.containerTasks}>
-                    {selectedSprint?.tareas.map(task => {
-                        const matchedTask = tareas.find(tarea => tarea._id === task._id)
-                        return matchedTask ? (
-                            <CardTaskInSprint key={task._id} tarea={matchedTask} estado="finalizada"/>
-                            ): null 
-                    })}
-                    </div>  
-                </div>
+<div className={styles.containerContentTasks}>
+  <h6>Tareas Finalizadas : {completed.length}</h6>
+  <div className={styles.containerTasks}>
+    {completed.map(task => (
+      <CardTaskInSprint key={task._id} tarea={task} estado="finalizada" />
+    ))}
+  </div>
+</div>
 
             </div>
         </div>
