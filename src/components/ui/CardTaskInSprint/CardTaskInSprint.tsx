@@ -13,6 +13,7 @@ import useStoreSprints from "../../../store/useStoreSprints"
 import { popUpSweetAlert } from "../../../utils/popUpSweetAlert"
 import { bigSweetAlertPopup } from "../../../utils/bigSweetAlertPopup"
 import Swal from "sweetalert2"
+import { ISprint } from "../../../types/iSprints"
 
 
 
@@ -69,7 +70,7 @@ export const CardTaskInSprint: FC<CardTaskInSprint> = ({tarea, estado}) => {
       if (sprintActiva) {
         try {
           // 1. Nueva lista de tareas sin la que se quiere eliminar
-          const tareasActualizadas = sprintActiva.tareas.filter(t => t.id !== tarea.id);
+          const tareasActualizadas = sprintActiva.tareas.filter(t => t !== tarea._id);
   
           // 2. Nueva sprint actualizada
           const nuevaSprint = { ...sprintActiva, tareas: tareasActualizadas };
@@ -78,7 +79,7 @@ export const CardTaskInSprint: FC<CardTaskInSprint> = ({tarea, estado}) => {
           await updateSprintController(nuevaSprint);
   
           // 4. Estado local
-          deleteTaskSprint(tarea.id, sprintActiva.id);
+          deleteTaskSprint(tarea._id, sprintActiva._id);
   
           // 5. Alerta final (sin sombra gris, abajo derecha, customizada)
           bigSweetAlertPopup("Tarea eliminada correctamente");
@@ -93,9 +94,9 @@ export const CardTaskInSprint: FC<CardTaskInSprint> = ({tarea, estado}) => {
   
   const handleSendTaskToBacklog = async () => {
     if (!sprintActiva) return;
-    await deleteTaskSprint(tarea.id, sprintActiva.id);
+    await deleteTaskSprint(tarea._id, sprintActiva._id);
 
-    const sprintActualizada = useStoreSprints.getState().sprints.find((sprint) => sprint.id === sprintActiva.id);
+    const sprintActualizada = useStoreSprints.getState().sprints.find((sprint) => sprint._id === sprintActiva._id);
 
     if(!sprintActualizada) return
 
@@ -122,7 +123,7 @@ export const CardTaskInSprint: FC<CardTaskInSprint> = ({tarea, estado}) => {
     };
   
     const tareasActualizadas = sprintActiva.tareas.map((t) =>
-      t.id === tarea.id ? tareaActualizada : t
+      t === tarea._id ? tareaActualizada : t
     );
   
     const nuevaSprint = {
@@ -130,9 +131,9 @@ export const CardTaskInSprint: FC<CardTaskInSprint> = ({tarea, estado}) => {
       tareas: tareasActualizadas,
     };
   
-    await updateSprintController(nuevaSprint);
+    await updateSprintController(nuevaSprint as ISprint);
     popUpSweetAlert("Estado cambiado", "El estado de la tarea ha sido cambiado");
-    useStoreSprints.getState().editTaskSprint(tareaActualizada, sprintActiva.id);
+    useStoreSprints.getState().editTaskSprint(tareaActualizada, sprintActiva._id);
   };
   
 
