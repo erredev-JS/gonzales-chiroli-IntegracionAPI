@@ -11,6 +11,8 @@ import { ISprint } from "../../../types/iSprints"
 
 import { CardTaskInSprint } from "../CardTaskInSprint/CardTaskInSprint"
 import useStoreTareas from "../../../store/useStoreTareas"
+import { searchOne } from "../../../data/tareaController"
+import { ITareas } from "../../../types/ITareas"
 
 
 
@@ -26,22 +28,10 @@ export const ListSprint = () => {
     const {sprints, setSprintActiva} = useStoreSprints()
     const {openModalTask} = useStoreModal()
     
-    //Ya no es necesario
-    // useEffect(() => {
-    //     if (!sprintActiva && sprints.length > 0) {
-    //         setSprintActiva(sprints[0]); 
-    //     }
-    // }, [sprints]); 
     
-    // useEffect(() => {
-    //     if(idsprint && sprints.length > 0){
-    //         const foundSprint = sprints.find((sprint) => sprint.id === idsprint)
-    //         if(foundSprint){
-    //             setSelectedSprint(foundSprint)
-    //         }
-    //     }
 
-    // }, [sprintActiva, idsprint]);
+    const [arrayTareas, setArrayTareas] = useState<ITareas[]>([])
+    
     useEffect(() => {
         if (!idsprint || sprints.length === 0) return;
     
@@ -52,6 +42,34 @@ export const ListSprint = () => {
             setSprintActiva(foundSprint);
         }
     }, [idsprint, sprints]);
+    useEffect(() => {
+        const fetchTasks = async () => {
+            if (!selectedSprint?.tareas) return;
+    
+            try {
+                const fetchedTasks = await Promise.all(
+                    selectedSprint.tareas.map(async task => {
+                        try {
+                            return await searchOne(task._id);
+                        } catch (error) {
+                            console.error("Error al cargar la tarea:", error);
+                            return null; // Devuelve null en caso de error
+                        }
+                    })
+                );
+    
+                // Filtra valores nulos y asegura el tipo correcto
+                const validTasks = fetchedTasks.filter((task): task is ITareas => task !== null);
+                setArrayTareas(validTasks); // Asegura que solo se asignen tareas válidas
+            } catch (error) {
+                console.error("Error en la carga de tareas:", error);
+            }
+        };
+    
+        fetchTasks();
+    }, [selectedSprint]);
+    
+    
 
     const pendingTasks = selectedSprint?.tareas.filter(task => task.estado === 'pendiente') || []
     const inProgress = selectedSprint?.tareas.filter(task => task.estado === 'en_progreso') || []

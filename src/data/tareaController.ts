@@ -2,17 +2,18 @@ import axios from "axios"
 import { ITareas } from "../types/ITareas"
 
 import { URL_TASKS } from "../utils/constantes"
-import { putTareaList } from "../http/crudTareas"
 import Swal from "sweetalert2"
 import { ICreateTareas } from "../types/ICreateTareas"
 
-/*
-import { URL_BACKLOG } from "../utils/constantes"
-import { putTareaList } from "../http/crudTareas"
-import Swal from "sweetalert2"
-*/
-
-
+export const searchOne = async (id: string): Promise<ITareas[]> => {
+    try {
+        const res = await axios.get(`${URL_TASKS}/${id}`);
+        return res.data;
+    } catch (error) {
+        console.error('Hubo un error al traer la tarea:', error);
+        throw new Error('No se pudo obtener la tarea.'); 
+    }
+};
 
 
 
