@@ -41,7 +41,7 @@ export const ListBacklog = () => {
     }, [])
 
 
-    const [arraySprints, setArraySprints] = useState<ISprint[]>([])
+  
 
     const [arrayIdTareasAsignadas, setArrayIdTareasAsignadas] = useState<string[]>([])
 
@@ -49,7 +49,6 @@ export const ListBacklog = () => {
       const fetchSprints = async () => {
         try {
           const fetchedSprints = await getAllSprintsController();
-          setArraySprints(fetchedSprints);
           const tareasAsignadasIds = fetchedSprints.flatMap(sprint => sprint.tareas);
           setArrayIdTareasAsignadas(tareasAsignadasIds);
           console.log("Tareas asignadas:", tareasAsignadasIds);
