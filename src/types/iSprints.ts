@@ -1,4 +1,3 @@
-import { ITareas } from "./ITareas"
 
 
 export interface ISprint {

@@ -4,7 +4,7 @@ import { ITareas } from "../../../types/ITareas"
 import { FC } from "react"
 import { useStoreModal } from "../../../store/useStoreModal"
 import useStoreTareas from "../../../store/useStoreTareas"
-import { createTareaController, deleteTareaController } from "../../../data/tareaController"
+import { createTareaController, deleteTareaController, updateTareaController } from "../../../data/tareaController"
 import viewIcon from '../../../assets/viewIcon.svg'
 import editIcon from '../../../assets/editIcon.svg'
 import deleteIcon from '../../../assets/deleteIcon.svg'
@@ -69,7 +69,7 @@ export const CardTaskInSprint: FC<CardTaskInSprint> = ({tarea, estado}) => {
       if (sprintActiva) {
         try {
           // 1. Nueva lista de tareas sin la que se quiere eliminar
-          const tareasActualizadas = sprintActiva.tareas.filter(t => t.id !== tarea.id);
+          const tareasActualizadas = sprintActiva.tareas.filter(idTarea => idTarea !== tarea._id);
   
           // 2. Nueva sprint actualizada
           const nuevaSprint = { ...sprintActiva, tareas: tareasActualizadas };
@@ -78,7 +78,7 @@ export const CardTaskInSprint: FC<CardTaskInSprint> = ({tarea, estado}) => {
           await updateSprintController(nuevaSprint);
   
           // 4. Estado local
-          deleteTaskSprint(tarea.id, sprintActiva.id);
+          deleteTaskSprint(tarea._id, sprintActiva._id);
   
           // 5. Alerta final (sin sombra gris, abajo derecha, customizada)
           bigSweetAlertPopup("Tarea eliminada correctamente");
@@ -93,9 +93,9 @@ export const CardTaskInSprint: FC<CardTaskInSprint> = ({tarea, estado}) => {
   
   const handleSendTaskToBacklog = async () => {
     if (!sprintActiva) return;
-    await deleteTaskSprint(tarea.id, sprintActiva.id);
+    await deleteTaskSprint(tarea._id, sprintActiva._id);
 
-    const sprintActualizada = useStoreSprints.getState().sprints.find((sprint) => sprint.id === sprintActiva.id);
+    const sprintActualizada = useStoreSprints.getState().sprints.find((sprint) => sprint._id === sprintActiva._id);
 
     if(!sprintActualizada) return
 
@@ -108,31 +108,41 @@ export const CardTaskInSprint: FC<CardTaskInSprint> = ({tarea, estado}) => {
 
   const cambiarEstadoTarea = async (direccion: number) => {
     if (!sprintActiva) return;
-  
+    console.log(tarea.estado)
     const estados = ["pendiente", "en_progreso", "finalizada"];
     const indiceActual = estados.indexOf(tarea.estado);
+    console.log(indiceActual)
     const nuevoIndice = indiceActual + direccion;
-  
+    console.log(nuevoIndice)
+    
     // Evitar índices fuera de rango
     if (nuevoIndice < 0 || nuevoIndice >= estados.length) return;
   
+    console.log(tarea)
+
     const tareaActualizada: ITareas = {
       ...tarea,
       estado: estados[nuevoIndice],
     };
-  
-    const tareasActualizadas = sprintActiva.tareas.map((t) =>
-      t.id === tarea.id ? tareaActualizada : t
-    );
+     await updateTareaController(tareaActualizada)
+    console.log(tareaActualizada)
+
+    // const tareasActualizadas = sprintActiva.tareas.map((t) =>
+    //   t === tarea._id ? tareaActualizada : t
+    // );
   
     const nuevaSprint = {
       ...sprintActiva,
-      tareas: tareasActualizadas,
+      tareas: [...sprintActiva.tareas],
     };
-  
+    console.log(nuevaSprint)
+    
+     // Se actualiza la tarea en la store (que ya tiene su copia completa)
+    //useStoreSprints.getState().editTaskSprint(tareaActualizada, sprintActiva._id);
+
     await updateSprintController(nuevaSprint);
     popUpSweetAlert("Estado cambiado", "El estado de la tarea ha sido cambiado");
-    useStoreSprints.getState().editTaskSprint(tareaActualizada, sprintActiva.id);
+    useStoreSprints.getState().editTaskSprint(tareaActualizada, sprintActiva._id);
   };
   
 

@@ -5,13 +5,10 @@ import { Button } from 'react-bootstrap'
 import { useStoreModal } from '../../../store/useStoreModal'
 import { useState } from 'react'
 import { updateSprintController } from '../../../data/sprintController'
-// import { deleteTareaController } from '../../../data/tareaController'
-import { bigSweetAlertPopup } from '../../../utils/bigSweetAlertPopup'
-import { deleteTareaController } from '../../../data/tareaController'
 
-// interface IModalSendTaskToSprint {
-//     tarea : ITareas
-// }
+import { bigSweetAlertPopup } from '../../../utils/bigSweetAlertPopup'
+
+
 
 
 export const ModalSendTaskToSprint  = () => {
