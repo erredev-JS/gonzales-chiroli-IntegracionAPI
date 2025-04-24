@@ -62,13 +62,13 @@ const ModalSprint = () => {
 
         if(!sprintActiva){
             createSprintController(formValues)
-            addSprint(formValues)
+            addSprint(formValues as ISprint)
             
         }else{
-            updateSprintController(formValues)
+            updateSprintController(formValues as ISprint)
             bigSweetAlertPopup("Sprint actualizada")
 
-            editSprint(formValues)
+            editSprint(formValues as ISprint)
             
         }
         

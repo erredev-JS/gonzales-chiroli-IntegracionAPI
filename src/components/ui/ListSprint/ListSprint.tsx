@@ -10,6 +10,7 @@ import {  useParams } from "react-router-dom"
 import { ISprint } from "../../../types/iSprints"
 
 import { CardTaskInSprint } from "../CardTaskInSprint/CardTaskInSprint"
+import useStoreTareas from "../../../store/useStoreTareas"
 
 
 
@@ -21,8 +22,8 @@ export const ListSprint = () => {
     
 
     const [selectedSprint, setSelectedSprint] = useState<ISprint>()
-
-    const {sprints, setSprintActiva, sprintActiva} = useStoreSprints()
+    const {tareas} = useStoreTareas()
+    const {sprints, setSprintActiva} = useStoreSprints()
     const {openModalTask} = useStoreModal()
     
     //Ya no es necesario
@@ -44,7 +45,7 @@ export const ListSprint = () => {
     useEffect(() => {
         if (!idsprint || sprints.length === 0) return;
     
-        const foundSprint = sprints.find(sprint => sprint.id === idsprint);
+        const foundSprint = sprints.find(sprint => sprint._id === idsprint);
     
         if (foundSprint) {
             setSelectedSprint(foundSprint);
@@ -52,11 +53,9 @@ export const ListSprint = () => {
         }
     }, [idsprint, sprints]);
 
-
     const pendingTasks = selectedSprint?.tareas.filter(task => task.estado === 'pendiente') || []
     const inProgress = selectedSprint?.tareas.filter(task => task.estado === 'en_progreso') || []
     const completed = selectedSprint?.tareas.filter(task => task.estado === 'finalizada') || []
-
 
     return (
         <div className={styles.containerPrincipal}>
@@ -73,36 +72,38 @@ export const ListSprint = () => {
                 <div className={styles.containerContentTasks}>
                     <h6>Tareas Pendientes : {pendingTasks.length}</h6>
                     <div className={styles.containerTasks}>                       
-                    {selectedSprint?.tareas.map(task => (
-                            task.estado === 'pendiente' &&
-                            <div className={styles.listContainer}>
-    
-                             <CardTaskInSprint key={task.id} tarea={task} estado="pendiente" />
-      
-
-    </div>
-                        ))}
+                    {selectedSprint?.tareas.map(task => {
+                        const matchedTask = tareas.find(tarea => tarea._id === task._id);
+                        return matchedTask ? (
+                        <CardTaskInSprint key={task._id} tarea={matchedTask} estado="pendiente" />
+                        ) : null; // Si no hay coincidencia no renderiza nada
+                    })}
                     </div>
                 </div>
+
 
                 <div className={styles.containerContentTasks}>
                     
                     <h6>Tareas en Progreso : {inProgress.length}</h6>
                     <div className={styles.containerTasks}>
-                    {selectedSprint?.tareas.map(task => (
-                            task.estado === 'en_progreso' &&
-                            <CardTaskInSprint key={task.id} tarea={task} estado="en_progreso" />
-                        ))}
+                    {selectedSprint?.tareas.map(task => {
+                            const matchedTask = tareas.find(tarea => tarea._id === task._id)
+                            return matchedTask ? (
+                                <CardTaskInSprint key={task._id} tarea={matchedTask} estado="en_progreso"/>
+                            ): null 
+                    })}
                     </div>
                 </div>
 
                 <div className={styles.containerContentTasks}>
                     <h6>Tareas Finalizadas : {completed.length}</h6>
                     <div className={styles.containerTasks}>
-                        {selectedSprint?.tareas.map(task => (
-                            task.estado === 'finalizada' &&
-                            <CardTaskInSprint key={task.id} tarea={task} estado="finalizada" />
-                        ))}
+                    {selectedSprint?.tareas.map(task => {
+                        const matchedTask = tareas.find(tarea => tarea._id === task._id)
+                        return matchedTask ? (
+                            <CardTaskInSprint key={task._id} tarea={matchedTask} estado="finalizada"/>
+                            ): null 
+                    })}
                     </div>  
                 </div>
 
