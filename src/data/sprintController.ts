@@ -21,7 +21,6 @@ export const getAllSprintsController = async (): Promise<ISprint[] | undefined> 
 export const createSprintController = async (nuevaSprint: ICreateSprints) => {
     try{
         const response = await axios.post(URL_SPRINTLIST, nuevaSprint)
-
         return response.data
     }catch(error){
         console.log("Hubo un error en createSprintController", error)

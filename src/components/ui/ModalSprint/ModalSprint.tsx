@@ -52,16 +52,13 @@ const ModalSprint = () => {
         }
     
         closeModalSprint()
-        // setTimeout(()=> {
-        //     window.location.reload()
-        // }, 500)
     }
 
     const handleSubmit = (e : FormEvent) => {
         e.preventDefault()
 
         if(!sprintActiva){
-            createSprintController(formValues)
+            createSprintController(formValues as ISprint)
             addSprint(formValues as ISprint)
             
         }else{
