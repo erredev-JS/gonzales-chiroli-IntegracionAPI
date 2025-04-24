@@ -7,6 +7,7 @@ import { useState } from 'react'
 import { updateSprintController } from '../../../data/sprintController'
 
 import { bigSweetAlertPopup } from '../../../utils/bigSweetAlertPopup'
+import { ISprint } from '../../../types/iSprints'
 
 
 
@@ -34,7 +35,7 @@ export const ModalSendTaskToSprint  = () => {
             ...sprintUpdate, tareas: [...sprintUpdate.tareas, tareaActiva]
         }
 
-        await updateSprintController(newSprint)
+        await updateSprintController(newSprint as ISprint)
         bigSweetAlertPopup("Tarea enviada a la Sprint")
 
 

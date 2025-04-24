@@ -1,7 +1,7 @@
 import axios from "axios"
 
 import { URL_SPRINTLIST } from "../utils/constantes"
-import { putSprintList } from "../http/crudSprints"
+
 import { ISprint } from "../types/iSprints"
 import { ICreateSprints } from "../types/ICreateSprints"
 

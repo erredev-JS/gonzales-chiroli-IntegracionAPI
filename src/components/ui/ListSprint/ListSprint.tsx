@@ -24,7 +24,6 @@ export const ListSprint = () => {
     
 
     const [selectedSprint, setSelectedSprint] = useState<ISprint>()
-    const {tareas} = useStoreTareas()
     const {sprints, setSprintActiva} = useStoreSprints()
     const {openModalTask} = useStoreModal()
     

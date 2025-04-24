@@ -57,18 +57,18 @@ export const useStoreSprints = create<IStoreSprints>((set) => ({
   addTaskToSprint: (tarea, idSprint) => set((state) => ({
     sprints: state.sprints.map((sprint) => sprint._id === idSprint ? {...sprint, tareas: [...sprint.tareas || [], tarea._id] } : sprint)
     })),
-  deleteTaskSprint: (idTarea, idSprint) =>
-    set((state) => {
-      const nuevosSprints = state.sprints.map((sprint) =>
-        sprint._id === idSprint
-          ? {
-              ...sprint,
-              tareas: (sprint.tareas || []).filter(
-                (tarea) => tarea !== idTarea
-              ),
-            }
-          : sprint
-      );
+    deleteTaskSprint: (idTarea, idSprint) =>
+      set((state) => {
+        const nuevosSprints = state.sprints.map((sprint) =>
+          sprint._id === idSprint
+            ? {
+                ...sprint,
+                tareas: (sprint.tareas || []).filter(
+                  (tarea) => tarea !== idTarea
+                ),
+              }
+            : sprint
+        );
   
       const nuevaSprintActiva =
         state.sprintActiva?._id === idSprint
@@ -89,9 +89,7 @@ export const useStoreSprints = create<IStoreSprints>((set) => ({
             ? {
                 ...sprint,
                 tareas: (sprint.tareas || []).map((tarea) =>
-                  tarea._id === tareaActualizada._id
-                    ? { ...tarea, ...tareaActualizada }
-                    : tarea
+                  tarea === tareaActualizada._id ? tareaActualizada._id : tarea
                 ),
               }
             : sprint

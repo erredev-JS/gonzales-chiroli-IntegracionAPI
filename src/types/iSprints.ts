@@ -1,5 +1,3 @@
-
-
 export interface ISprint {
     _id: string ,
     fechaInicio: string,

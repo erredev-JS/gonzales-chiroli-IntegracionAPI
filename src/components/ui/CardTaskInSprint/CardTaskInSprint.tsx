@@ -4,7 +4,7 @@ import { ITareas } from "../../../types/ITareas"
 import { FC } from "react"
 import { useStoreModal } from "../../../store/useStoreModal"
 import useStoreTareas from "../../../store/useStoreTareas"
-import { createTareaController, deleteTareaController, updateTareaController } from "../../../data/tareaController"
+
 import viewIcon from '../../../assets/viewIcon.svg'
 import editIcon from '../../../assets/editIcon.svg'
 import deleteIcon from '../../../assets/deleteIcon.svg'
@@ -13,6 +13,8 @@ import useStoreSprints from "../../../store/useStoreSprints"
 import { popUpSweetAlert } from "../../../utils/popUpSweetAlert"
 import { bigSweetAlertPopup } from "../../../utils/bigSweetAlertPopup"
 import Swal from "sweetalert2"
+import { updateTareaController } from "../../../data/tareaController"
+
 
 
 
@@ -22,7 +24,7 @@ type CardTaskInSprint = {
     estado: string
 }
 
-export const CardTaskInSprint: FC<CardTaskInSprint> = ({tarea, estado}) => {
+export const CardTaskInSprint: FC<CardTaskInSprint> = ({tarea}) => {
 
   const sprintActiva = useStoreSprints((state) => state.sprintActiva)
 
@@ -101,7 +103,7 @@ export const CardTaskInSprint: FC<CardTaskInSprint> = ({tarea, estado}) => {
 
     await updateSprintController(sprintActualizada)
     addTareaInactiva(tarea)
-    createTareaController(tarea)
+    // createTareaController(tarea)
 
     popUpSweetAlert("Tarea enviada al Backlog", "La tarea está en el backlog ahora");
   }
