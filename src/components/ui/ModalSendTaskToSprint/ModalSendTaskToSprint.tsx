@@ -39,10 +39,12 @@ export const ModalSendTaskToSprint  = () => {
         bigSweetAlertPopup("Tarea enviada a la Sprint")
 
 
-        addTaskToSprint(tareaActiva, sprintSeleccionada) // Actualizo el estado
+        await addTaskToSprint(tareaActiva, sprintSeleccionada) // Actualizo el estado
         //deleteTareaController(tareaActiva._id)
         setTareaActiva(null)
         
+        useStoreTareas.getState().deleteTarea(tareaActiva._id)
+
         closeModalTaskSend()
 
     }

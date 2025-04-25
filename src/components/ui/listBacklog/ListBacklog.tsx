@@ -20,6 +20,7 @@ export const ListBacklog = () => {
   const setTareas = useStoreTareas((state) => state.setTareas)
 
   const {tareas} = useStoreTareas()
+  const [arrayIdTareasAsignadas, setArrayIdTareasAsignadas] = useState<string[]>([])
 
 
 
@@ -42,15 +43,22 @@ export const ListBacklog = () => {
 
   
 
-    const [arrayIdTareasAsignadas, setArrayIdTareasAsignadas] = useState<string[]>([])
-
+    
     useEffect(() => {
       const fetchSprints = async () => {
         try {
           const fetchedSprints = await getAllSprintsController();
           const tareasAsignadasIds = fetchedSprints.flatMap(sprint => sprint.tareas);
-          setArrayIdTareasAsignadas(tareasAsignadasIds);
-          console.log("Tareas asignadas:", tareasAsignadasIds);
+
+           // Comparar contenido antes de actualizar
+          const idsActuales = [...arrayIdTareasAsignadas].sort().join(',');
+          const idsNuevos = [...tareasAsignadasIds].sort().join(',');
+
+          if (idsActuales !== idsNuevos) {
+            setArrayIdTareasAsignadas(tareasAsignadasIds);
+            console.log("Tareas asignadas actualizadas:", tareasAsignadasIds);
+          }
+
         } catch (error) {
           console.error("Error al obtener los sprints:", error);
         }

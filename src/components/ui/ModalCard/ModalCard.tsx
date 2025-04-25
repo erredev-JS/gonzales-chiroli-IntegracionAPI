@@ -115,7 +115,7 @@ export const ModalCard = () => {
                     console.log('No se pudo crear tarea en la sprint', err);
                 })
             } else {
-                editTaskSprint(formValues as ITareas, sprintActiva._id);
+                updateTareaController(formValues as ITareas).then(() => editTaskSprint(formValues as ITareas, sprintActiva._id));
                 const sprintActualizado = useStoreSprints
                     .getState()
                     .sprints.find((s) => s._id === sprintActiva._id);
