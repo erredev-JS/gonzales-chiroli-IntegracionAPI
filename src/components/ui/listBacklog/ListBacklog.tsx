@@ -5,7 +5,6 @@ import { TareaCard } from '../TareaCard/TareaCard';
 import { useStoreModal } from '../../../store/useStoreModal';
 import { getAllTareasController } from '../../../data/tareaController';
 import useStoreTareas from '../../../store/useStoreTareas';
-import { ISprint } from '../../../types/iSprints';
 import { getAllSprintsController } from '../../../data/sprintController';
 
 
@@ -58,7 +57,7 @@ export const ListBacklog = () => {
       };
     
       fetchSprints();
-    }, []);
+    }, [arrayIdTareasAsignadas]);
     
    
 
@@ -74,12 +73,7 @@ export const ListBacklog = () => {
       </div>
     </div>
     <div className={styles.listContainer}>
-     {/*
-        {tareas.map((tarea) => (
-          <TareaCard key={tarea._id} tarea={tarea}></TareaCard>
-        ))}
-
-          */}
+     
 
           {tareas.filter(tarea => !arrayIdTareasAsignadas.includes(tarea._id)).map((tarea) => (<TareaCard tarea={tarea} key={tarea._id}></TareaCard>))}
     </div>

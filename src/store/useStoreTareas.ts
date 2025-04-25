@@ -30,20 +30,20 @@ export const useStoreTareas = create<IStoreTareas>((set) => ({
         tareas: [...state.tareas, tarea]
     })),
     editTarea: (tareaActualizada) => set((state) => {
-        const tareas =  state.tareas.map((tarea) => tarea.id === tareaActualizada.id ? {...tarea, ...tareaActualizada} : tarea)
+        const tareas =  state.tareas.map((tarea) => tarea._id === tareaActualizada._id ? {...tarea, ...tareaActualizada} : tarea)
         return {tareas: tareas}
     }),
 
     setTareaState: (idTarea, nuevoEstado) => set((state) => ({
         tareas: state.tareas.map((tarea) => 
-            tarea.id === idTarea ? { ...tarea, estado: nuevoEstado } : tarea
+            tarea._id === idTarea ? { ...tarea, estado: nuevoEstado } : tarea
         )
     }))
     ,
         
     
     deleteTarea: (idTarea) => set((state) => ({
-        tareas : state.tareas.filter((tarea) => tarea.id !== idTarea)
+        tareas : state.tareas.filter((tarea) => tarea._id !== idTarea)
 
     })),
 
